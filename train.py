@@ -1,14 +1,14 @@
 import TF2_Keras_Template as template
 import CNN
 
-batchsize = 32
+batchsize = 16
 
 
 #Get data generator
 ds = template.ImageDataset(batchsize)
 ds.addDataFromTXT("data/train_images.txt","data/train_fixations.txt","data/val_images.txt","data/val_fixations.txt")
-trainGenerator = ds.getGenerator()
-valGenerator = ds.getGenerator(isTrain=False)
+trainGenerator = ds.getGenerator(outputsize=(192,192))
+valGenerator = ds.getGenerator(outputsize=(192,192),isTrain=False)
 
 
 #Get Model
@@ -17,7 +17,7 @@ model,epoch = net.getModel((None,None,3),(None,None,1)) #(None,None) basically m
 
 
 #Get Loggers
-logger = template.Logger("savedata/",model)
+logger = template.Logger("savedata/",model,period=20)
 logger.setTestImages("data/images/test")
 callbacks = logger.getCallbacks()
 
