@@ -17,15 +17,15 @@ model,epoch = net.getModel((None,None,3),(None,None,1)) #(None,None) basically m
 
 
 #Get Loggers
-logger = template.Logger("savedata/",model,period=20)
+logger = template.Logger("savedata/",model)
 logger.setTestImages("data/images/test")
-callbacks = logger.getCallbacks()
+callbacks = logger.getCallbacks(period=20)
 
 
 #Train
 trainSteps = int(len(ds.trainData)/batchsize)
 validSteps = int(len(ds.valData)/batchsize)
-model.fit_generator(trainGenerator,
+model.fit(trainGenerator,
                 steps_per_epoch=trainSteps,
                 epochs=1000,
                 shuffle=True,
