@@ -49,5 +49,5 @@ class NeuralNetwork(template.nnBase.NNBase):
         model.add(Conv2D(1, (3, 3), activation='relu',padding='same'))
         model.add(Dropout(0.1))
                 
-        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.compile(optimizer='adam', loss='mean_squared_error',metrics=["mse","mae"])
         return model

@@ -7,6 +7,8 @@ batchsize = 16
 #Get data generator
 ds = template.ImageDataset(batchsize)
 ds.addDataFromTXT("data/train_images.txt","data/train_fixations.txt","data/val_images.txt","data/val_fixations.txt")
+ds.addDataFromTXT("data/CAT2000/images.txt","data/CAT2000/fixations.txt",splitTrain=True)
+ds.addDataFromTXT("data/MIT/imgs.txt","data/MIT/fixs.txt",splitTrain=True)
 trainGenerator = ds.getGenerator(outputsize=(192,192))
 valGenerator = ds.getGenerator(outputsize=(192,192),isTrain=False)
 
