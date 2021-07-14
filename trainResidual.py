@@ -1,15 +1,28 @@
 import TF2_Keras_Template as template
-import CNN
-from train import CustomDataset
+from nets import ResFreeze
+from dataManager import CustomDataset
 
-def makeTrainable(blocks):
+def makeTrainable(i):
     global model
-    for layer in model.layers[1:20]:
-        layer.trainable = blocks[0]
-    for layer in model.layers[20:39]:
-        layer.trainable = blocks[1]
-    for layer in model.layers[39:58]:
-        layer.trainable = blocks[2]
+    preBlock=True
+    postBlock = False
+    for layer in model.layers:
+        if preBlock:
+            #Everything until the start layer will be not trainable
+            if layer.name == F"BlockStart_{i}":
+                layer.trainable=True
+                preBlock=False
+            else:
+                layer.trainable=False
+        elif postBlock:
+            #Everthing after the end layer will be not trainable
+            layer.trainable=False
+        else:
+            #If were not before not after the block we will set layer trainable and look for the end
+            layer.trainable=True
+            if layer.name == F"BlockEnd_{i}":
+                postBlock = True
+        print(F"Set {layer.name} trainable: {layer.trainable}")
     model.compile(optimizer='adam', loss='mean_squared_error')
 
 
@@ -25,7 +38,7 @@ def train(currentEpoch=0,epochLength=500):
                 callbacks=callbacks)    
     
 
-batchsize = 64
+batchsize = 16
 
 
 #Get data generator
@@ -38,7 +51,7 @@ valGenerator = ds.getGenerator(isTrain=False)
 
 
 #Get Model
-net = CNN.NeuralNetwork()
+net = ResFreeze.NeuralNetwork()
 model,epoch = net.getModel((None,None,3),(None,None,1)) #(None,None) basically means we don't care. Because it is a CNN the output shape will be determined by the architecture
 
 
@@ -53,18 +66,19 @@ trainSteps = int(len(ds.trainData)/batchsize)
 validSteps = int(len(ds.valData)/batchsize)
 firstRun = True
     
-print("Starting Phase 1")
-makeTrainable((True,False,False))
-train(50)
+print("Starting Phase 0")
+makeTrainable(0)
+train(0,50)
 
-print("Starting Phase 2")
-makeTrainable((False,True,False))
+print("Starting Phase 1")
+makeTrainable(1)
 train(50,50)
 
-print("Starting Phase 3")
-makeTrainable((False,False,True))
+print("Starting Phase 2")
+makeTrainable(2)
 train(100,50)
 
 print("Starting End Phase")
-makeTrainable((True,True,True))
+for layer in model.layer: layer.trainable=True
+model.compile(optimizer='adam', loss='mean_squared_error')
 train(150,250)

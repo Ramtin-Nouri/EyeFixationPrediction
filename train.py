@@ -1,19 +1,8 @@
 import TF2_Keras_Template as template
-import CNN,cv2,numpy as np
-
+from dataManager import CustomDataset
+from nets import CNN
+import cv2,numpy as np
 batchsize = 16
-
-class CustomDataset(template.ImageDataset):
-    def augmentate(self, batchIn, batchOut, isTrain):
-        if isTrain:
-            return self.normCropReshape(batchIn,batchOut,(192,192))
-        else:
-            ins = []
-            outs = []
-            for in_,out_ in zip(batchIn,batchOut):
-                ins.append(cv2.resize(in_/255,(224,224)))
-                outs.append(cv2.resize(out_/255,(224,224)))
-            return (np.array(ins),np.array(outs))
 
 #Get data generator
 ds = CustomDataset(batchsize)
@@ -40,7 +29,7 @@ trainSteps = int(len(ds.trainData)/batchsize)
 validSteps = int(len(ds.valData)/batchsize)
 model.fit(trainGenerator,
                 steps_per_epoch=trainSteps,
-                epochs=1000,
+                epochs=250,
                 shuffle=True,
                 initial_epoch=epoch,
                 validation_steps=validSteps,
