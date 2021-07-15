@@ -1,7 +1,6 @@
 import TF2_Keras_Template as template
 from dataManager import CustomDataset
 from nets import CNN
-import cv2,numpy as np
 batchsize = 16
 
 #Get data generator
