@@ -1,7 +1,7 @@
 import TF2_Keras_Template as template
 from dataManager import CustomDataset
 from nets import CNN
-batchsize = 16
+batchsize = 4
 
 #Get data generator
 ds = CustomDataset(batchsize)
@@ -20,7 +20,7 @@ model,epoch = net.getModel((None,None,3),(None,None,1)) #(None,None) basically m
 #Get Loggers
 logger = template.Logger("savedata/",model)
 logger.setTestImages("data/images/test")
-callbacks = logger.getCallbacks(period=20)
+callbacks = logger.getCallbacks(period=10)
 
 
 #Train
