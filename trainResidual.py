@@ -23,7 +23,7 @@ def makeTrainable(i):
             if layer.name == F"BlockEnd_{i}":
                 postBlock = True
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.compile(optimizer='adam', loss='mean_squared_error',metrics=["mae"])
 
 
 def train(currentEpoch=0,epochLength=500):
@@ -80,5 +80,5 @@ train(100,50)
 
 print("Starting End Phase")
 for layer in model.layers: layer.trainable=True
-model.compile(optimizer='adam', loss='mean_squared_error')
+model.compile(optimizer='adam', loss='mean_squared_error',metrics=["mae"])
 train(150,250)

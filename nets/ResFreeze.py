@@ -47,7 +47,8 @@ class NeuralNetwork(template.nnBase.NNBase):
         conv8 = Conv2D(32, (3, 3), activation='relu',padding='same')(add3)
         up4 = UpSampling2D((2,2))(conv8)
         add4 = Concatenate(name=F"BlockEnd_{i}")([up4,conv1])
-        return add4
+        drop = Dropout(0.2)(add4)
+        return drop
                 
 
 
