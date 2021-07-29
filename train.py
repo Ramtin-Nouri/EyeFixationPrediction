@@ -1,11 +1,13 @@
 import TF2_Keras_Template as template
 from dataManager import CustomDataset
 from nets import CNN
+import customLogger
 batchsize = 4
 
 #Get data generator
 ds = CustomDataset(batchsize)
 ds.addDataFromTXT("data/train_images.txt","data/train_fixations.txt","data/val_images.txt","data/val_fixations.txt")
+ds.addDataFromTXT("data/Salicon/train_images.txt","data/Salicon/train_fixations.txt","data/Salicon/val_images.txt","data/Salicon/val_fixations.txt")
 ds.addDataFromTXT("data/CAT2000/images.txt","data/CAT2000/fixations.txt",splitTrain=True)
 ds.addDataFromTXT("data/MIT/imgs.txt","data/MIT/fixs.txt",splitTrain=True)
 trainGenerator = ds.getGenerator(isTrain=True)
@@ -18,7 +20,7 @@ model,epoch = net.getModel((None,None,3),(None,None,1)) #(None,None) basically m
 
 
 #Get Loggers
-logger = template.Logger("savedata/",model)
+logger = customLogger.CustomLogger("savedata/",model)
 logger.setTestImages("data/images/test")
 callbacks = logger.getCallbacks(period=10)
 
