@@ -66,7 +66,6 @@ class NeuralNetwork(template.nnBase.NNBase):
 
         x = Conv2D(64, (8,8), activation='relu',padding='same', use_bias=False)(x)
         x = BatchNormalization()(x)
-        x = BatchNormalization()(x)
         x = MaxPooling2D((2, 2))(x)
         x = Dropout(dropoutStrength)(x)
 
@@ -82,11 +81,11 @@ class NeuralNetwork(template.nnBase.NNBase):
         #Merge
         concat = concatenate([x1,x2,x3])
         concat = Conv2D(128, (3, 3), activation='relu',padding='same', use_bias=False)(concat)
-        concat = BatchNormalization()(x)
+        concat = BatchNormalization()(concat)
         concat = Conv2D(64, (3, 3), activation='relu',padding='same', use_bias=False)(concat)
-        concat = BatchNormalization()(x)
+        concat = BatchNormalization()(concat)
         concat = Conv2D(32, (3, 3), activation='relu',padding='same', use_bias=False)(concat)
-        concat = BatchNormalization()(x)
+        concat = BatchNormalization()(concat)
 
         #1
         x = Conv2D(32, (3, 3), activation='relu',padding='same', use_bias=False)(concat)
